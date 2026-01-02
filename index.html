@@ -1,70 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Campaign Pacing Insights</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Instant theme sync (system first paint + parent override) -->
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
-            colors: {
-              gray: {
-                50: '#f9fafb',
-                100: '#f3f4f6',
-                200: '#e5e7eb', // Definition border
-                300: '#d1d5db',
-                400: '#9ca3af',
-                500: '#6b7280', // Muted text
-                600: '#4b5563',
-                900: '#111827', // Dark text
-              },
-              blue: {
-                50: '#eff6ff',
-                500: '#3b82f6',
-                600: '#2563eb', // Brand blue
-              }
-            }
+      (function () {
+        function applyTheme(theme) {
+          if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
           }
         }
-      }
+
+        function detectInitialTheme() {
+          try {
+            if (
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches
+            ) {
+              applyTheme("dark");
+            } else {
+              applyTheme("light");
+            }
+          } catch (e) {
+            applyTheme("light");
+          }
+        }
+
+        function handleMessage(event) {
+          const data = event.data || {};
+          if (
+            (data.type === "THEME_CHANGE" || data.type === "THEME_RESPONSE") &&
+            (data.theme === "dark" || data.theme === "light")
+          ) {
+            applyTheme(data.theme);
+          }
+        }
+
+        // 1) First paint: system preference
+        detectInitialTheme();
+
+        // 2) Parent messages
+        window.addEventListener("message", handleMessage, false);
+
+        // 3) Ask parent for current theme
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: "REQUEST_THEME" }, "*");
+          }
+        } catch (e) {}
+      })();
     </script>
-    <style>
-      /* Custom scrollbar for clean utility feel */
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: #e5e7eb;
-        border-radius: 20px;
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "jspdf": "https://esm.sh/jspdf@2.5.1",
-    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.1"
-  }
-}
-</script>
-</head>
-  <body class="bg-[#f9fafb] min-h-screen">
+  </head>
+
+  <body class="min-h-screen">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
     <script src="https://cdn.jsdelivr.net/npm/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>
   </body>
 </html>
+
