@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 interface PacingVisualizerProps {
   percentTime: number;
   percentBudget: number;
-  status: 'over' | 'under' | 'healthy' | 'trending_high' | 'trending_low';
+  status: "over" | "under" | "healthy" | "trending_high" | "trending_low";
 }
 
 export const PacingVisualizer: React.FC<PacingVisualizerProps> = ({
@@ -13,21 +13,27 @@ export const PacingVisualizer: React.FC<PacingVisualizerProps> = ({
 }) => {
   const getBudgetColor = () => {
     switch (status) {
-      case 'over': return 'bg-red-500';
-      case 'under': return 'bg-red-500';
-      case 'trending_high': return 'bg-orange-500';
-      case 'trending_low': return 'bg-orange-500';
-      default: return 'bg-green-500';
+      case "over":
+      case "under":
+        return "bg-red-500";
+      case "trending_high":
+      case "trending_low":
+        return "bg-orange-500";
+      default:
+        return "bg-green-500";
     }
   };
 
   const getStatusLabelColor = () => {
     switch (status) {
-      case 'over': return 'text-red-600';
-      case 'under': return 'text-red-600';
-      case 'trending_high': return 'text-orange-600';
-      case 'trending_low': return 'text-orange-600';
-      default: return 'text-green-600';
+      case "over":
+      case "under":
+        return "text-red-600";
+      case "trending_high":
+      case "trending_low":
+        return "text-orange-600";
+      default:
+        return "text-green-600";
     }
   };
 
@@ -40,21 +46,23 @@ export const PacingVisualizer: React.FC<PacingVisualizerProps> = ({
         <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
           Visual Breakdown
         </span>
-        <div className="h-px bg-gray-100 flex-grow"></div>
+        <div className="h-px bg-gray-100 dark:bg-zinc-800 flex-grow"></div>
       </div>
 
       <div className="space-y-4">
         {/* Time Bar */}
         <div>
-          <div className="flex justify-between text-xs font-medium text-gray-500 mb-1.5">
+          <div className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-300 mb-1.5">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
               Time Elapsed
             </span>
-            <span className="text-gray-900 font-bold">{percentTime.toFixed(1)}%</span>
+            <span className="text-gray-900 dark:text-white font-bold">
+              {percentTime.toFixed(1)}%
+            </span>
           </div>
-          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-            <div 
+          <div className="h-2 w-full bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div
               className="h-full bg-gray-400 rounded-full transition-all duration-700 ease-out"
               style={{ width: `${timeWidth}%` }}
             />
@@ -63,7 +71,7 @@ export const PacingVisualizer: React.FC<PacingVisualizerProps> = ({
 
         {/* Budget Bar */}
         <div>
-          <div className="flex justify-between text-xs font-medium text-gray-500 mb-1.5">
+          <div className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-300 mb-1.5">
             <span className="flex items-center gap-1.5">
               <span className={`w-1.5 h-1.5 rounded-full ${getBudgetColor()}`}></span>
               Budget Used
@@ -72,8 +80,8 @@ export const PacingVisualizer: React.FC<PacingVisualizerProps> = ({
               {percentBudget.toFixed(1)}%
             </span>
           </div>
-          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-            <div 
+          <div className="h-2 w-full bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div
               className={`h-full rounded-full transition-all duration-700 ease-out ${getBudgetColor()}`}
               style={{ width: `${budgetWidth}%` }}
             />
